@@ -1,0 +1,422 @@
+/* ── Reset & tokens ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #111114;
+  --surface:      #1a1a1f;
+  --surface2:     #222228;
+  --border:       #2e2e38;
+  --accent:       #7c6aff;
+  --accent-hover: #9b8dff;
+  --text:         #e0e0e8;
+  --text-muted:   #888899;
+  --danger:       #ff5f5f;
+  --success:      #4ade80;
+  --radius:       8px;
+  --sidebar-w:    310px;
+  --header-h:     48px;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+header {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.header-note {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+/* ── Main layout ─────────────────────────────────────────────────────── */
+main {
+  display: flex;
+  height: calc(100vh - var(--header-h));
+  overflow: hidden;
+}
+
+/* ── 3-D Viewport section ────────────────────────────────────────────── */
+#viewport-section {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.drop-zone {
+  flex: 1 1 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.drop-zone.drag-over::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  pointer-events: none;
+  background: rgba(124, 106, 255, 0.06);
+}
+
+.drop-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.drop-hint.hidden { opacity: 0; pointer-events: none; }
+
+.link-label {
+  color: var(--accent);
+  cursor: pointer;
+  pointer-events: all;
+  text-decoration: underline;
+}
+
+#viewport {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+#viewport-footer {
+  height: 28px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.mesh-info {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.viewport-controls-hint {
+  margin-left: auto;
+  font-size: 11px;
+  color: #555566;
+}
+
+/* ── Settings panel ──────────────────────────────────────────────────── */
+#settings-panel {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+#settings-panel::-webkit-scrollbar { width: 5px; }
+#settings-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.panel-section {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-section h2 {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* ── Preset grid ─────────────────────────────────────────────────────── */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.preset-swatch {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s, transform 0.1s;
+  position: relative;
+}
+
+.preset-swatch:hover { border-color: var(--text-muted); transform: scale(1.04); }
+.preset-swatch.active { border-color: var(--accent); }
+
+.preset-swatch canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.preset-swatch .preset-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 9px;
+  text-align: center;
+  padding: 2px 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.preset-swatch:hover .preset-label { opacity: 1; }
+
+/* ── Custom upload button ─────────────────────────────────────────────── */
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.upload-btn:hover {
+  background: var(--border);
+  border-color: var(--accent);
+}
+
+.active-map-name {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  word-break: break-all;
+}
+
+/* ── Form rows ───────────────────────────────────────────────────────── */
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.form-row:last-child { margin-bottom: 0; }
+
+.form-row label {
+  flex: 0 0 80px;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.form-row select {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 5px 8px;
+  font-size: 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
+}
+
+.form-row select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ── Sliders ─────────────────────────────────────────────────────────── */
+.slider-row { align-items: center; }
+
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: grab;
+  transition: background 0.15s;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; background: var(--accent-hover); }
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); border: none; cursor: grab;
+}
+
+.val {
+  flex: 0 0 56px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Hint text ───────────────────────────────────────────────────────── */
+.hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+/* ── Export progress ─────────────────────────────────────────────────── */
+.export-progress {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.export-progress.hidden { display: none; }
+
+.export-progress-bar {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.1s;
+  margin-bottom: 6px;
+}
+
+/* ── Export button ───────────────────────────────────────────────────── */
+.export-btn {
+  width: 100%;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.export-btn:hover:not(:disabled) { background: var(--accent-hover); }
+.export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.export-btn.busy { opacity: 0.7; pointer-events: none; }
+/* ── Lock / proportional-scale button ───────────────────────────────────── */
+.lock-btn {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.lock-btn.active {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface2));
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.lock-btn:hover { border-color: var(--accent-hover); }
+
+/* ── Lock row connector ───────────────────────────────────────────────────────── */
+.lock-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0;
+}
+
+.lock-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Triangle limit warning ──────────────────────────────────────────────── */
+.tri-limit-warning {
+  background: color-mix(in srgb, #f59e0b 15%, var(--surface2));
+  border: 1px solid #f59e0b;
+  color: #f59e0b;
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.tri-limit-warning.hidden { display: none; }
