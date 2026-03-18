@@ -65,7 +65,7 @@ export function computeUV(pos, normal, mode, settings, bounds) {
       const C  = TWO_PI * Math.max(r, 1e-6);
       const rx = pos.x - center.x;
       const ry = pos.y - center.y;
-      if (Math.abs(normal.z) > 0.5) {
+      if (Math.abs(normal.z) > 0.7) {
         // Cap face — normalise by C so one tile = same world size as on the side
         u = rx / C + 0.5;
         v = ry / C + 0.5;

@@ -97,7 +97,7 @@ const fragmentShader = /* glsl */`
       //   fills the diameter × diameter square so the disc looks fully textured.
       float r = max(boundsSize.x, boundsSize.y) * 0.5;
       float C = TWO_PI * max(r, 1e-4);
-      if (abs(vModelNormal.z) > 0.5) {
+      if (abs(vModelNormal.z) > 0.7) {
         // Cap face — normalise by C so one tile = same world size as on the side
         return sampleMap(vec2(
           rel.x / C + 0.5,
