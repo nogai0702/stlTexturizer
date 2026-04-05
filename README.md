@@ -1,6 +1,7 @@
-# STL Texturizer
+# BumpMesh by CNC Kitchen
 
-**Live demo:** https://cnckitchen.github.io/stlTexturizer/
+**Live:** https://bumpmesh.com  
+**GitHub:** https://github.com/CNCKitchen/stlTexturizer
 
 A browser-based tool for applying surface displacement textures to 3D meshes — no installation required.
 
@@ -9,8 +10,9 @@ Load an STL, OBJ, or 3MF file, pick a texture, tune the parameters, and export a
 ## Features
 
 ### Textures
-- **18 built-in seamless textures** — basket, brick, bubble, carbon fiber, crystal, dots, grip surface, hexagons, knitting, knurling, leather, leather 2, noise, voronoi, weave (×3 variants), wood
+- **24 built-in seamless textures** — basket, brick, bubble, carbon fiber, crystal, dots, grid, grip surface, hexagon, hexagons, isogrid, knitting, knurling, leather 2, noise, stripes (×2 variants), voronoi, weave (×3 variants), wood (×3 variants)
 - **Custom textures** — upload your own image as a displacement map
+- **Texture smoothing** — configurable blur to soften the displacement map before applying
 
 ### Projection Modes
 - **Triplanar** (default) — blends three planar projections based on surface normals; best for complex shapes
@@ -83,7 +85,9 @@ Load an STL, OBJ, or 3MF file, pick a texture, tune the parameters, and export a
 ```
 index.html            # Main entry point
 style.css             # Styles (light / dark theme)
-textures/             # Built-in JPG displacement map images (18 textures)
+logo.png              # Favicon & header logo
+CNAME                 # Custom domain (bumpmesh.com)
+textures/             # Built-in JPG/PNG displacement map images (24 textures)
 js/
   main.js             # App bootstrap & UI wiring
   viewer.js           # Three.js scene / camera / controls
@@ -98,6 +102,42 @@ js/
   exporter.js         # Binary STL export
   i18n.js             # Translations (EN / DE)
 ```
+
+## Run Locally
+
+All processing runs entirely in the browser — no backend or build step is needed. You just need a local HTTP server because browsers block ES module imports and texture loading from `file://` URLs.
+
+```bash
+# Clone the repository
+git clone https://github.com/CNCKitchen/stlTexturizer.git
+cd stlTexturizer
+```
+
+Then start any static file server from the project root. Pick whichever you have installed:
+
+**Python (3.x)**
+```bash
+python -m http.server 8000
+```
+
+**Python (2.x)**
+```bash
+python -m SimpleHTTPServer 8000
+```
+
+**Node.js (npx, no install needed)**
+```bash
+npx serve .
+```
+
+**PHP**
+```bash
+php -S localhost:8000
+```
+
+Open http://localhost:8000 in your browser and you're ready to go.
+
+> **Tip:** Any static server will work — the app has no server-side dependencies.
 
 ## Dependencies
 
