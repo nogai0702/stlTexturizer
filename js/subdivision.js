@@ -84,6 +84,7 @@ export async function subdivide(geometry, maxEdgeLength, onProgress, faceWeights
 
     const newTriCount = newIndices.length / 3;
     if (onProgress) onProgress(Math.min(0.95, (iter + 1) / maxIterations), newTriCount, longestEdge);
+    // Yield once per subdivision pass (not per iteration) — keeps background tabs fast
     await new Promise(r => setTimeout(r, 0));
     if (!changed || safetyCapHit) break;
   }

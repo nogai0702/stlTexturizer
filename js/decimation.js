@@ -46,8 +46,17 @@ const FLIP_DOT_SQ   = FLIP_DOT * FLIP_DOT;
 const CREASE_COS    = 0.5;  // cos 60° — edges sharper than this are treated as creases
 const CREASE_WEIGHT = 1e4;  // quadric penalty weight for crease edges
 
-// Yield to browser for UI responsiveness during long-running decimation.
-// setTimeout(0) guarantees a real rendering frame between iterations.
+// Time-based yield: only yield every ~100ms of wall time instead of every N iterations.
+// In foreground tabs setTimeout(0) costs ~4ms; in background tabs it's throttled to ~1s.
+// By yielding based on elapsed time we get ~10 yields per second in foreground (smooth progress)
+// and minimal extra delay in background (~10 yields × 1s = ~10s overhead instead of ~200s).
+let _lastYieldTime = 0;
+function _shouldYield() {
+  const now = performance.now();
+  if (now - _lastYieldTime < 100) return false;
+  _lastYieldTime = now;
+  return true;
+}
 function _yieldFrame() {
   return new Promise(r => setTimeout(r, 0));
 }
@@ -109,10 +118,10 @@ export async function decimate(geometry, targetTriangles, onProgress) {
     const idx = heap.pop();
     if (idx < 0) break;
 
-    // Yield periodically based on total iterations (including rejections)
-    // to keep the UI responsive.  Critical for flat / low-displacement
-    // surfaces where most collapses are rejected by the safety guards.
-    if ((++iterations & 4095) === 0) {
+    // Yield based on elapsed wall time (~every 100ms) instead of fixed iteration count.
+    // Drastically reduces overhead in background tabs where setTimeout is throttled to 1s.
+    ++iterations;
+    if (_shouldYield()) {
       await _yieldFrame();
       if (onProgress) {
         const p = Math.min(1, (initFaces - activeFaces) / toRemove);
