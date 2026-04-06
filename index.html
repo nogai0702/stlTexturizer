@@ -163,11 +163,6 @@
         <div id="amplitude-warning" class="amplitude-warning hidden" data-i18n="warnings.amplitudeOverlap">
           ⚠ Amplitude exceeds 10% of the smallest model dimension — geometry overlaps may occur in the exported STL.
         </div>
-        <div class="form-row slider-row">
-          <label for="boundary-falloff" data-i18n="labels.boundaryFalloff" data-i18n-title="tooltips.boundaryFalloff" title="Gradually reduces displacement to zero near masked boundaries, preventing triangle overlap where textured and non-textured regions meet.">Boundary Falloff ⓘ</label>
-          <input type="range" id="boundary-falloff" min="0" max="10" step="0.1" value="1" />
-          <input type="number" class="val" id="boundary-falloff-val" value="1" min="0" max="10" step="0.1" />
-        </div>
         <div class="form-row">
           <label class="checkbox-label" for="symmetric-displacement"
             data-i18n-title="tooltips.symmetricDisplacement"
@@ -228,9 +223,19 @@
         </div>
       </section>
 
-      <!-- Mask Angles -->
+      <!-- Masking -->
       <section class="panel-section">
-        <h2 data-i18n="sections.maskAngles" data-i18n-title="tooltips.maskAngles" title="0° = no masking. Surfaces within this angle of horizontal will not be textured.">Mask Angles ⓘ</h2>
+        <h2 data-i18n="sections.masking">Masking</h2>
+
+        <!-- Boundary Falloff (applies to both angle and surface masking) -->
+        <div class="form-row slider-row">
+          <label for="boundary-falloff" data-i18n="labels.boundaryFalloff" data-i18n-title="tooltips.boundaryFalloff" title="Gradually reduces displacement to zero near masked boundaries, preventing triangle overlap where textured and non-textured regions meet.">Smooth Mask ⓘ</label>
+          <input type="range" id="boundary-falloff" min="0" max="10" step="0.1" value="0" />
+          <input type="number" class="val" id="boundary-falloff-val" value="0" min="0" max="10" step="0.1" />
+        </div>
+
+        <!-- By Angle -->
+        <h3 class="panel-subsection-heading" data-i18n="sections.maskAngles" data-i18n-title="tooltips.maskAngles" title="0° = no masking. Surfaces within this angle of horizontal will not be textured.">By Angle ⓘ</h3>
         <div class="form-row slider-row">
           <label for="bottom-angle-limit" data-i18n="labels.bottomFaces" data-i18n-title="tooltips.bottomFaces" title="Suppress texture on downward-facing surfaces within this angle of horizontal">Bottom faces</label>
           <input type="range" id="bottom-angle-limit" min="0" max="90" step="1" value="5" />
@@ -241,11 +246,9 @@
           <input type="range" id="top-angle-limit" min="0" max="90" step="1" value="0" />
           <input type="number" class="val" id="top-angle-limit-val" value="0" min="0" max="90" step="1" />
         </div>
-      </section>
 
-      <!-- Surface Exclusions -->
-      <section class="panel-section">
-        <h2 id="excl-section-heading" data-i18n="sections.surfaceMasking" data-i18n-title="tooltips.surfaceMasking" title="Mask surfaces to control which areas receive displacement.">Surface Masking ⓘ</h2>
+        <!-- By Surface -->
+        <h3 class="panel-subsection-heading" id="excl-section-heading" data-i18n="sections.surfaceMasking" data-i18n-title="tooltips.surfaceMasking" title="Mask surfaces to control which areas receive displacement.">By Surface ⓘ</h3>
         <p id="excl-hint" class="excl-hint" style="display:none"></p>
 
         <!-- Mode toggle: Exclude / Include Only -->

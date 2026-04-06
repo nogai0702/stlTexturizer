@@ -62,7 +62,7 @@ const settings = {
   seamBandWidth:    0.5,
   textureSmoothing: 0,
   capAngle:         20,
-  boundaryFalloff:  1,
+  boundaryFalloff:  0,
   symmetricDisplacement: false,
   useDisplacement: false,
 };

@@ -391,6 +391,15 @@ main {
   margin-bottom: 10px;
 }
 
+.panel-subsection-heading {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 14px 0 8px;
+}
+
 /* ── Preset grid ─────────────────────────────────────────────────────── */
 .preset-grid {
   display: grid;
